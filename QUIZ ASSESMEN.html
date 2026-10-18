@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz & Assignment - Mechanical Energy</title>
+    <style>
+        /* --- COLOR PALETTE & VARIABLES (Dark Navy Theme) --- */
+        :root {
+            --bg-main: #0a192f;
+            --bg-card: #112240;
+            --text-main: #e6f1ff;
+            --text-muted: #8892b0;
+            --accent: #64ffda;
+            --border-color: #233554;
+            --input-bg: #0a192f;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(2, 12, 27, 0.7);
+            border: 1px solid var(--border-color);
+        }
+
+        h1, h2 {
+            color: var(--accent);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+        }
+
+        .header-info {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .student-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            background-color: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .student-info .form-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-info label {
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .student-info input {
+            flex: 1;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .section-title {
+            background-color: rgba(100, 255, 218, 0.05);
+            padding: 12px 15px;
+            border-left: 5px solid var(--accent);
+            font-weight: bold;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 16px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- INSTRUCTION NOTE --- */
+        .instruction-note {
+            background-color: rgba(243, 156, 18, 0.1);
+            border: 1px solid var(--warning);
+            border-left: 5px solid var(--warning);
+            color: #f5b041;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* --- MULTIPLE CHOICE QUESTIONS --- */
+        .question-block {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 15px;
+            accent-color: var(--accent);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .option-item.correct {
+            border-color: var(--success);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .option-item.incorrect {
+            border-color: var(--error);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        /* --- ESSAY QUESTIONS --- */
+        .essay-block {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+
+        textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        /* --- BUTTONS & ACTIONS --- */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            width: 100%;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: var(--border-color);
+            color: var(--text-main);
+            font-size: 14px;
+            padding: 8px 16px;
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #2a4365;
+        }
+
+        .btn-print {
+            background-color: var(--accent);
+            color: var(--bg-main);
+            border: 2px solid var(--accent);
+            width: 100%;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-print:hover {
+            background-color: #4cd9b8;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            display: none;
+        }
+
+        /* --- ESSAY ANSWER KEY --- */
+        .answer-key {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(100, 255, 218, 0.05);
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .answer-key p {
+            margin: 5px 0;
+        }
+
+        /* --- PRINT STYLES (For PDF Generation) --- */
+        @media print {
+            body {
+                background-color: white !important;
+                color: black !important;
+                padding: 0;
+            }
+            .container {
+                background-color: white !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                max-width: 100%;
+            }
+            h1, h2, .section-title, .question-text, .student-info label {
+                color: black !important;
+            }
+            h1, .section-title {
+                border-bottom: 1px solid black;
+                border-left: none !important;
+                background: transparent !important;
+                padding-left: 0;
+            }
+            .header-info, .student-info {
+                color: #333 !important;
+                border-color: #ccc !important;
+                background: transparent !important;
+            }
+            .student-info input {
+                border: none !important;
+                border-bottom: 1px solid black !important;
+                background: transparent !important;
+                color: black !important;
+            }
+            .question-block, .essay-block {
+                border: 1px solid #ccc !important;
+                background: transparent !important;
+                page-break-inside: avoid;
+            }
+            .option-item {
+                background: transparent !important;
+                border: none !important;
+                color: black !important;
+                padding: 2px 0;
+            }
+            .option-item.correct, .option-item.incorrect {
+                background: transparent !important;
+            }
+            .option-item input[type="radio"] {
+                accent-color: black;
+            }
+            textarea {
+                border: 1px solid #666 !important;
+                background: transparent !important;
+                color: black !important;
+                height: auto !important;
+                min-height: 100px;
+                overflow: visible !important;
+            }
+            /* Keep instruction note visible in print */
+            .instruction-note {
+                background: transparent !important;
+                border: 1px solid black !important;
+                color: black !important;
+            }
+            /* Hide interactive elements */
+            .btn-primary, .btn-secondary, .btn-print, .result-box, .answer-key {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Quiz & Independent Assignment</h1>
+    <div class="header-info">
+        <strong>Subject:</strong> Physics | <strong>Topic:</strong> Conservation of Mechanical Energy<br>
+        <em>Use g = 10 m/s² for all calculations.</em>
+    </div>
+
+    <!-- Student Info (Will be visible on PDF) -->
+    <div class="student-info">
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" placeholder="Student's Full Name">
+        </div>
+        <div class="form-group">
+            <label>Class:</label>
+            <input type="text" placeholder="Grade / Class">
+        </div>
+    </div>
+
+    <!-- ================= PART I: MULTIPLE CHOICE ================= -->
+    <div class="section-title">I. Multiple Choice Quiz (3 Minutes)</div>
+    
+    <form id="quizForm">
+        <!-- Question 1 -->
+        <div class="question-block" id="q1-block">
+            <div class="question-text">1. The mechanical energy of an object is defined as ...</div>
+            <div class="options-list">
+                <label class="option-item"><input type="radio" name="q1" value="A"> a. The sum of potential energy and kinetic energy</label>
+                <label class="option-item"><input type="radio" name="q1" value="B"> b. The difference between potential energy and kinetic energy</label>
+                <label class="option-item"><input type="radio" name="q1" value="C"> c. The product of mass and velocity</label>
+                <label class="option-item"><input type="radio" name="q1" value="D"> d. The work done by the track's frictional force</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-block" id="q2-block">
+            <div class="question-text">2. A marble with a mass of 0.02 kg is released from the peak of a track with a height of 0.8 m. The mechanical energy of the marble when it is at a height of 0.3 m above the base of the track is ...</div>
+            <div class="options-list">
+                <label class="option-item"><input type="radio" name="q2" value="A"> a. 0.06 Joule</label>
+                <label class="option-item"><input type="radio" name="q2" value="B"> b. 0.10 Joule</label>
+                <label class="option-item"><input type="radio" name="q2" value="C"> c. 0.16 Joule</label>
+                <label class="option-item"><input type="radio" name="q2" value="D"> d. 0.20 Joule</label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-block" id="q3-block">
+            <div class="question-text">3. The mechanical energy of a sliding object remains constant if ...</div>
+            <div class="options-list">
+                <label class="option-item"><input type="radio" name="q3" value="A"> a. Only the gravitational force acts on it, and friction is neglected</label>
+                <label class="option-item"><input type="radio" name="q3" value="B"> b. The track is made steeper and smoother</label>
+                <label class="option-item"><input type="radio" name="q3" value="C"> c. The object has a very large mass</label>
+                <label class="option-item"><input type="radio" name="q3" value="D"> d. The object's velocity remains constant at every point</label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-block" id="q4-block">
+            <div class="question-text">4. A marble slides from rest from the peak of a smooth track with a height of 0.2 meters. The velocity of the marble when it reaches the base of the track is ...</div>
+            <div class="options-list">
+                <label class="option-item"><input type="radio" name="q4" value="A"> a. 1 m/s</label>
+                <label class="option-item"><input type="radio" name="q4" value="B"> b. 2 m/s</label>
+                <label class="option-item"><input type="radio" name="q4" value="C"> c. 4 m/s</label>
+                <label class="option-item"><input type="radio" name="q4" value="D"> d. 10 m/s</label>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="checkAnswers()">Check Multiple Choice Answers</button>
+        <div id="resultBox" class="result-box"></div>
+    </form>
+
+    <!-- ================= PART II: ESSAY ================= -->
+    <div class="section-title">II. Essay Homework Assignment (Due Next Meeting)</div>
+
+    <!-- NEW INSTRUCTION NOTE -->
+    <div class="instruction-note">
+        &#9888; <strong>Instruction:</strong> Please write your complete calculation steps and final answers on a separate sheet of paper to be submitted next meeting. The text boxes below are provided for your digital draft (optional).
+    </div>
+
+    <!-- Essay Question 1 -->
+    <div class="essay-block">
+        <div class="question-text">1. A 0.1 kg toy car is released from the peak of a smooth slide with a height of 1.25 m. Determine the velocity of the toy car when it is at a height of 0.45 m above the floor! (g = 10 m/s²).</div>
+        <textarea rows="5" placeholder="Digital draft (optional)..."></textarea>
+        
+        <button type="button" class="btn btn-secondary" onclick="toggleKey('key1')">Show/Hide Answer Key</button>
+        <div id="key1" class="answer-key">
+            <p><strong>Solution:</strong></p>
+            <p>Given: m = 0.1 kg, h₁ = 1.25 m, h₂ = 0.45 m, v₁ = 0</p>
+            <p>Apply the Law of Conservation of Mechanical Energy: EM₁ = EM₂</p>
+            <p>mgh₁ + ½mv₁² = mgh₂ + ½mv₂²</p>
+            <p>gh₁ = gh₂ + ½v₂² &rarr; v₂² = 2g(h₁ - h₂)</p>
+            <p>v₂² = 2(10)(1.25 - 0.45) = 20(0.8) = 16</p>
+            <p><strong>v₂ = 4 m/s</strong></p>
+        </div>
+    </div>
+
+    <!-- Essay Question 2 -->
+    <div class="essay-block">
+        <div class="question-text">2. A miniature roller coaster train with a mass of 0.05 kg slides from rest from the peak of a track with a height of 0.8 m. <br><br>
+            a. Calculate the velocity of the train when it reaches the base of the smooth track!<br>
+            b. Calculate the kinetic energy at the base and compare its value with the potential energy at the peak!</div>
+        <textarea rows="6" placeholder="Digital draft (optional)..."></textarea>
+        
+        <button type="button" class="btn btn-secondary" onclick="toggleKey('key2')">Show/Hide Answer Key</button>
+        <div id="key2" class="answer-key">
+            <p><strong>Solution:</strong></p>
+            <p>Given: m = 0.05 kg, h = 0.8 m, v₁ = 0</p>
+            <p><strong>a. Velocity at the base (v₂):</strong></p>
+            <p>EP at peak = EK at base &rarr; mgh = ½mv₂²</p>
+            <p>v₂ = &radic;(2gh) = &radic;(2 × 10 × 0.8) = &radic;16 = <strong>4 m/s</strong></p>
+            <br>
+            <p><strong>b. Energy Comparison:</strong></p>
+            <p>EK at base = ½mv₂² = ½(0.05)(4)² = <strong>0.4 Joule</strong></p>
+            <p>EP at peak = mgh = (0.05)(10)(0.8) = <strong>0.4 Joule</strong></p>
+            <p><em>Conclusion: The kinetic energy at the base is equal to the potential energy at the peak (0.4 Joule), verifying the conservation of mechanical energy.</em></p>
+        </div>
+    </div>
+
+    <!-- ================= PRINT/PDF BUTTON ================= -->
+    <button type="button" class="btn btn-print" onclick="prepareAndPrint()">Save as PDF / Print</button>
+
+</div>
+
+<script>
+    // Multiple Choice Answer Key
+    const correctAnswers = {
+        q1: 'A',
+        q2: 'C',
+        q3: 'A',
+        q4: 'B'
+    };
+
+    function checkAnswers() {
+        let score = 0;
+        let total = 4;
+        
+        // Reset previous colors
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.classList.remove('correct', 'incorrect');
+        });
+
+        for (let q in correctAnswers) {
+            const selectedOption = document.querySelector(`input[name="${q}"]:checked`);
+            const block = document.getElementById(`${q}-block`);
+            
+            if (selectedOption) {
+                const selectedValue = selectedOption.value;
+                const parentLabel = selectedOption.parentElement;
+                
+                if (selectedValue === correctAnswers[q]) {
+                    score++;
+                    parentLabel.classList.add('correct');
+                } else {
+                    parentLabel.classList.add('incorrect');
+                    // Highlight the correct answer
+                    const correctLabel = block.querySelector(`input[value="${correctAnswers[q]}"]`).parentElement;
+                    correctLabel.classList.add('correct');
+                }
+            } else {
+                // If unanswered, highlight the correct answer
+                const correctLabel = block.querySelector(`input[value="${correctAnswers[q]}"]`).parentElement;
+                correctLabel.classList.add('correct');
+            }
+        }
+
+        // Display Results
+        const resultBox = document.getElementById('resultBox');
+        resultBox.style.display = 'block';
+        
+        if (score === total) {
+            resultBox.style.backgroundColor = 'rgba(46, 204, 113, 0.2)';
+            resultBox.style.color = '#2ecc71';
+            resultBox.innerHTML = `Perfect! Your Score: ${score} / ${total}`;
+        } else {
+            resultBox.style.backgroundColor = 'rgba(231, 76, 60, 0.2)';
+            resultBox.style.color = '#e74c3c';
+            resultBox.innerHTML = `Your Score: ${score} / ${total}. Please review the answers highlighted in red.`;
+        }
+    }
+
+    // Function to toggle essay answer keys
+    function toggleKey(id) {
+        const element = document.getElementById(id);
+        if (element.style.display === 'block') {
+            element.style.display = 'none';
+        } else {
+            element.style.display = 'block';
+        }
+    }
+
+    // Function to prepare and trigger print/PDF
+    function prepareAndPrint() {
+        // Auto-resize textareas so text isn't cut off in the PDF
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach(ta => {
+            ta.style.height = 'auto'; // Reset height
+            ta.style.height = ta.scrollHeight + 'px'; // Set to scroll height
+        });
+
+        // Small delay to ensure height adjustment renders before print dialog opens
+        setTimeout(() => {
+            window.print();
+        }, 100);
+    }
+</script>
+
+</body>
+</html>
